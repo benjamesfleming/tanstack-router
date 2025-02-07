@@ -1,7 +1,6 @@
 import path from 'node:path'
 import * as fs from 'node:fs'
 import * as fsp from 'node:fs/promises'
-import * as prettier from 'prettier'
 import {
   determineInitialRoutePath,
   logging,
@@ -20,6 +19,7 @@ import { getRouteNodes as virtualGetRouteNodes } from './filesystem/virtual/getR
 import { rootPathId } from './filesystem/physical/rootPathId'
 import type { GetRouteNodesResult, RouteNode } from './types'
 import type { Config } from './config'
+import { format } from './format'
 
 export const CONSTANTS = {
   // When changing this, you'll want to update the import in `start/api/index.ts#defaultAPIFileRouteHandler`
@@ -69,12 +69,6 @@ export async function generator(config: Config, root: string) {
   const start = Date.now()
 
   const TYPES_DISABLED = config.disableTypes
-
-  const prettierOptions: prettier.Options = {
-    semi: config.semicolons,
-    singleQuote: config.quoteStyle === 'single',
-    parser: 'typescript',
-  }
 
   let getRouteNodesResult: GetRouteNodesResult
 
@@ -151,7 +145,7 @@ export async function generator(config: Config, root: string) {
       logger.log(`🟡 Creating ${node.fullPath}`)
       fs.writeFileSync(
         node.fullPath,
-        await prettier.format(replaced, prettierOptions),
+        await format(replaced, config),
       )
     }
   }
@@ -248,7 +242,7 @@ export async function generator(config: Config, root: string) {
 
       await writeIfDifferent(
         node.fullPath,
-        prettierOptions,
+        config,
         routeCode,
         replaced,
         {
@@ -386,12 +380,12 @@ export async function generator(config: Config, root: string) {
       logger.log(`🟡 Creating ${node.fullPath}`)
       fs.writeFileSync(
         node.fullPath,
-        await prettier.format(replaced, prettierOptions),
+        await format(replaced, config),
       )
     } else {
       await writeIfDifferent(
         node.fullPath,
-        prettierOptions,
+        config,
         routeCode,
         routeCode.replace(
           /(createAPIFileRoute\(\s*['"])([^\s]*)(['"],?\s*\))/g,
@@ -727,7 +721,7 @@ export async function generator(config: Config, root: string) {
   // Write the route tree file, if it has changed
   const routeTreeWriteResult = await writeIfDifferent(
     path.resolve(config.generatedRouteTree),
-    prettierOptions,
+    config,
     existingRouteTreeContent,
     routeConfigFileContent,
     {

@@ -27,6 +27,7 @@ export const configSchema = z.object({
   generatedRouteTree: z.string().optional().default('./src/routeTree.gen.ts'),
   quoteStyle: z.enum(['single', 'double']).optional().default('single'),
   semicolons: z.boolean().optional().default(false),
+  formatter: z.enum(['prettier', 'none']).optional().default('prettier'),
   disableTypes: z.boolean().optional().default(false),
   addExtensions: z.boolean().optional().default(false),
   disableLogging: z.boolean().optional().default(false),

@@ -1,5 +1,6 @@
 import * as fs from 'node:fs'
-import * as prettier from 'prettier'
+import { format } from './format'
+import type { Config } from './config'
 
 export function multiSortBy<T>(
   arr: Array<T>,
@@ -131,14 +132,14 @@ export function removeExt(d: string, keepExtension: boolean = false) {
  */
 export async function writeIfDifferent(
   filepath: string,
-  prettierOptions: prettier.Options,
+  config: Config,
   content: string,
   incomingContent: string,
   callbacks?: { beforeWrite?: () => void; afterWrite?: () => void },
 ): Promise<boolean> {
   const [formattedContent, updatedContent] = await Promise.all([
-    prettier.format(content, prettierOptions),
-    prettier.format(incomingContent, prettierOptions),
+    format(content, config),
+    format(incomingContent, config),
   ])
 
   if (formattedContent !== updatedContent) {

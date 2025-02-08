@@ -143,10 +143,7 @@ export async function generator(config: Config, root: string) {
       )
 
       logger.log(`🟡 Creating ${node.fullPath}`)
-      fs.writeFileSync(
-        node.fullPath,
-        await format(replaced, config),
-      )
+      fs.writeFileSync(node.fullPath, await format(replaced, config))
     }
   }
 
@@ -240,17 +237,11 @@ export async function generator(config: Config, root: string) {
           )
       }
 
-      await writeIfDifferent(
-        node.fullPath,
-        config,
-        routeCode,
-        replaced,
-        {
-          beforeWrite: () => {
-            logger.log(`🟡 Updating ${node.fullPath}`)
-          },
+      await writeIfDifferent(node.fullPath, config, routeCode, replaced, {
+        beforeWrite: () => {
+          logger.log(`🟡 Updating ${node.fullPath}`)
         },
-      )
+      })
     }
 
     if (
@@ -378,10 +369,7 @@ export async function generator(config: Config, root: string) {
       })
 
       logger.log(`🟡 Creating ${node.fullPath}`)
-      fs.writeFileSync(
-        node.fullPath,
-        await format(replaced, config),
-      )
+      fs.writeFileSync(node.fullPath, await format(replaced, config))
     } else {
       await writeIfDifferent(
         node.fullPath,

@@ -418,7 +418,7 @@ The following options are available for configuration via the `tsr.config.json` 
   - (Optional, **Defaults to `false`**) whether to use semicolons in the generated route tree file.
 - **`formatter`**
   - (Optional, **Defaults to `prettier`**)
-  - If set to `none`, updates to the generated route files  won't have any formatting applied. This is useful when using a formatter other than Prettier.
+  - If set to `none`, updates to the generated route files won't have any formatting applied. This is useful when using a formatter other than Prettier.
 - **`apiBase`**
   - (Optional) The base path for API routes. Defaults to `/api`.
   - This option is reserved for future use by the TanStack Start for API routes.
